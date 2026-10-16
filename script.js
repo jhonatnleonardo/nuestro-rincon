@@ -46,3 +46,42 @@ $('pausarVideo').onclick=()=>{const v=$('fondoVideo');if(!v.getAttribute('src'))
 $('quitarVideo').onclick=()=>{const v=$('fondoVideo');v.pause();v.removeAttribute('src');v.load();v.style.display='none';if(urlVideo)URL.revokeObjectURL(urlVideo);urlVideo='';$('archivoVideo').value='';};
 const color=leer('amor-color','#fff7f1');if(/^#[0-9a-f]{6}$/i.test(color)){$('color').value=color;document.body.style.setProperty('--color-dia',color);}
 $('color').oninput=e=>{document.body.classList.remove('noche');$('tema').textContent='☾ Modo noche';guardar('amor-noche',false);document.body.style.setProperty('--color-dia',e.target.value);guardar('amor-color',e.target.value);};
+
+// Álbum local: IndexedDB conserva las fotos sin publicarlas en GitHub.
+(()=>{
+ let baseFotos=null;
+ const urlsFotos=[];
+ const estado=$('estadoFotos'),boton=$('guardarFoto');
+ boton.disabled=true;
+ if(!('indexedDB' in window)){estado.textContent='Este navegador no permite guardar fotos. Prueba en Chrome.';return;}
+ const apertura=indexedDB.open('nuestro-futuro-album',1);
+ apertura.onupgradeneeded=()=>apertura.result.createObjectStore('fotos',{keyPath:'id',autoIncrement:true});
+ apertura.onerror=()=>{estado.textContent='No se pudo abrir el álbum. Revisa los permisos de almacenamiento del navegador.';};
+ apertura.onsuccess=()=>{baseFotos=apertura.result;boton.disabled=false;dibujarFotos();};
+ function dibujarFotos(){
+  const consulta=baseFotos.transaction('fotos','readonly').objectStore('fotos').getAll();
+  consulta.onerror=()=>{estado.textContent='No se pudo leer el álbum.';};
+  consulta.onsuccess=()=>{
+   urlsFotos.forEach(u=>URL.revokeObjectURL(u));urlsFotos.length=0;
+   $('albumFotos').replaceChildren();
+   const fotos=consulta.result.reverse();estado.textContent=fotos.length?`${fotos.length} foto${fotos.length===1?'':'s'} en nuestro álbum.`:'Todavía no hay fotos. Guarda el primer recuerdo o sueño ♡';
+   fotos.forEach(f=>{
+    const figura=document.createElement('figure');figura.className='papel foto-album';
+    const foto=document.createElement('img');foto.src=URL.createObjectURL(f.archivo);urlsFotos.push(foto.src);foto.alt=f.texto||f.tipo;foto.loading='lazy';
+    const pie=document.createElement('figcaption'),tipo=document.createElement('strong'),texto=document.createElement('p'),fecha=document.createElement('small');
+    tipo.textContent=f.tipo;texto.textContent=f.texto;fecha.textContent=new Date(f.fecha).toLocaleDateString('es');pie.append(tipo,texto,fecha);figura.append(foto,pie);$('albumFotos').append(figura);
+   });
+  };
+ }
+ $('subirFoto').onsubmit=e=>{
+  e.preventDefault();if(!baseFotos)return;
+  const archivo=$('fotoArchivo').files[0];if(!archivo)return;
+  if(!['image/jpeg','image/png','image/webp'].includes(archivo.type)){estado.textContent='Elige una foto JPG, PNG o WebP.';return;}
+  if(archivo.size>10*1024*1024){estado.textContent='La foto supera los 10 MB. Elige una más pequeña.';return;}
+  boton.disabled=true;boton.textContent='Guardando…';
+  const transaccion=baseFotos.transaction('fotos','readwrite');
+  transaccion.objectStore('fotos').add({archivo,texto:$('fotoTexto').value.trim(),tipo:$('fotoTipo').value,fecha:new Date().toISOString()});
+  transaccion.oncomplete=()=>{$('subirFoto').reset();boton.disabled=false;boton.textContent='Guardar foto ♡';dibujarFotos();avisar('Foto guardada en este dispositivo ♡');};
+  transaccion.onabort=()=>{boton.disabled=false;boton.textContent='Guardar foto ♡';estado.textContent='No se pudo guardar la foto. Puede que no haya espacio disponible.';};
+ };
+})();
