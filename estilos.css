@@ -10,3 +10,5 @@ body:has(#fondoVideo[style*='block']) .velo{opacity:.50}
 .pareja-anime{display:block;width:100%;max-width:260px;aspect-ratio:1;object-fit:cover;border-radius:50%;margin:28px auto 22px;border:3px solid var(--borde)}.frase-recuerdo{margin:28px 0;padding:25px 30px;border-left:3px solid var(--rosa);background:var(--papel);font:italic 24px/1.6 Georgia,serif}.frase-recuerdo span{display:block;margin-top:12px;font:12px Arial,sans-serif;letter-spacing:2px;color:var(--rosa)}
 
 .corazon-iniciales{max-width:300px;margin:18px auto 5px}.corazon-iniciales img{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 18px #d75d8b30)}
+
+.carta-permanente{max-width:800px;margin:30px auto 45px;padding:clamp(20px,4vw,44px)}.carta-permanente h2{font-size:clamp(25px,4vw,36px);line-height:1.4}.carta-permanente p{line-height:1.95}.carta-permanente strong{color:var(--rosa)}
