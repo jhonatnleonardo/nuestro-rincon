@@ -85,3 +85,35 @@ $('color').oninput=e=>{document.body.classList.remove('noche');$('tema').textCon
   transaccion.onabort=()=>{boton.disabled=false;boton.textContent='Guardar foto ♡';estado.textContent='No se pudo guardar la foto. Puede que no haya espacio disponible.';};
  };
 })();
+
+// Lista de canciones incluidas y canciones añadidas en este navegador.
+(()=>{
+ const audio=$('musica');audio.loop=false;
+ let seleccion=0,base=null;
+ const canciones=['AMOR4','AMOR','AMOR2','AMOR3'].map(nombre=>({nombre,src:`${nombre}.mp3`}));
+ function dibujar(){
+  $('listaMusica').replaceChildren();
+  canciones.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='suave cancion'+(i===seleccion?' elegida':'');b.textContent=(i===seleccion?'♫ ':'')+c.nombre;b.setAttribute('aria-pressed',String(i===seleccion));b.onclick=()=>reproducir(i);$('listaMusica').append(b);});
+ }
+ function reproducir(i){seleccion=(i+canciones.length)%canciones.length;const c=canciones[seleccion];audio.src=c.src;$('nombreMusica').textContent=c.nombre;dibujar();audio.play().catch(()=>avisar('Pulsa reproducir para escuchar la canción.'));}
+ function agregar(f){canciones.push({nombre:f.name,src:URL.createObjectURL(f)});}
+ $('musicaAnterior').onclick=()=>reproducir(seleccion-1);
+ $('musicaSiguiente').onclick=()=>reproducir(seleccion+1);
+ audio.onended=()=>reproducir(seleccion+1);
+ if('indexedDB' in window){
+  const apertura=indexedDB.open('nuestro-futuro-musica',1);
+  apertura.onupgradeneeded=()=>apertura.result.createObjectStore('canciones',{autoIncrement:true});
+  apertura.onsuccess=()=>{base=apertura.result;const q=base.transaction('canciones','readonly').objectStore('canciones').getAll();q.onsuccess=()=>{q.result.forEach(agregar);dibujar();};};
+ }
+ $('archivoMusica').onchange=()=>{
+  const archivos=Array.from($('archivoMusica').files).filter(f=>f.type.startsWith('audio/')||/\.(mp3|mpeg|m4a|ogg|wav|aac|flac)$/i.test(f.name));
+  if(!archivos.length){avisar('Selecciona archivos de música compatibles.');return;}
+  const validos=archivos.filter(f=>f.size<=30*1024*1024);
+  if(validos.length!==archivos.length)avisar('Solo se añaden canciones de hasta 30 MB.');
+  if(!validos.length)return;
+  const primera=canciones.length;validos.forEach(agregar);dibujar();reproducir(primera);$('archivoMusica').value='';
+  if(base){const tx=base.transaction('canciones','readwrite');const tabla=tx.objectStore('canciones');validos.forEach(f=>tabla.add(f));tx.oncomplete=()=>avisar('Canciones añadidas y guardadas en este navegador ♡');tx.onabort=()=>avisar('Se pueden escuchar ahora, pero no se guardaron. Revisa el espacio del navegador.');}
+  else avisar('Canciones añadidas para esta sesión. El navegador no pudo guardarlas.');
+ };
+ dibujar();
+})();
