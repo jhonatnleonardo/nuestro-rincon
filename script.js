@@ -22,7 +22,7 @@ function mostrar(id){document.querySelectorAll('.seccion').forEach(s=>s.hidden=s
 document.querySelectorAll('[data-seccion]').forEach(b=>b.onclick=()=>mostrar(b.dataset.seccion));
 $('verCarta').onclick=()=>mostrar('carta');
 document.querySelector('header a').onclick=e=>{e.preventDefault();mostrar('inicio');};
-$('acceso').onsubmit=e=>{e.preventDefault();if($('clave').value!==CONTRASENA){$('error').textContent='La contraseña no es correcta. Inténtalo otra vez.';return;}usuario=$('perfil').value;$('clave').value='';$('error').textContent='';$('entrada').hidden=true;$('pagina').hidden=false;mostrar('inicio');dibujarNotas();iniciarAmbiente();};
+$('acceso').onsubmit=e=>{e.preventDefault();if($('clave').value!==CONTRASENA){$('error').textContent='La contraseña no es correcta. Inténtalo otra vez.';return;}usuario=$('perfil').value;$('clave').value='';$('error').textContent='';$('entrada').hidden=true;$('pagina').hidden=false;mostrar('inicio');iniciarAmbiente();};
 $('salir').onclick=()=>{usuario='';$('pagina').hidden=true;$('entrada').hidden=false;$('musica').pause();$('fondoVideo').pause();$('clave').focus();};
 function tema(noche){document.body.classList.toggle('noche',noche);$('tema').textContent=noche?'☀ Modo día':'☾ Modo noche';}
 tema(leer('amor-noche',false));
@@ -30,30 +30,6 @@ $('tema').onclick=()=>{const noche=!document.body.classList.contains('noche');te
 const fechas=leer('amor-fechas',{});$('conocimos').value=fechas.conocimos||'';$('juntos').value=fechas.juntos||'';
 function contar(){const fecha=$('juntos').value;if(!fecha){$('contador').textContent='Tenemos tantos recuerdos por crear.';return;}const dias=Math.floor((Date.now()-new Date(fecha+'T00:00:00'))/86400000);$('contador').textContent=dias>=0?`${dias.toLocaleString('es')} días escribiendo nuestra historia.`:'Nuestra próxima aventura ya tiene fecha.';}
 contar();$('guardarFechas').onclick=()=>{if(guardar('amor-fechas',{conocimos:$('conocimos').value,juntos:$('juntos').value}))avisar('Fechas guardadas ♡');contar();};
-let notas=leer('amor-notas',[]);if(!Array.isArray(notas))notas=[];
-let ultimaNotaBorrada=null;
-function dibujarNotas(){
- $('notas').replaceChildren();
- if(ultimaNotaBorrada){
-  const aviso=document.createElement('div');aviso.className='papel';
-  const texto=document.createElement('p');texto.textContent='Nota borrada de este navegador.';
-  const deshacer=document.createElement('button');deshacer.type='button';deshacer.className='suave';deshacer.textContent='Deshacer borrado';
-  deshacer.onclick=()=>{const copia=notas.slice();copia.splice(Math.min(ultimaNotaBorrada.indice,copia.length),0,ultimaNotaBorrada.nota);if(!guardar('amor-notas',copia))return;notas=copia;ultimaNotaBorrada=null;dibujarNotas();};
-  aviso.append(texto,deshacer);$('notas').append(aviso);
- }
- if(!notas.length){const vacio=document.createElement('p');vacio.textContent='Aquí comienza nuestra colección de palabras bonitas.';$('notas').append(vacio);return;}
- notas.slice().reverse().forEach((n,pos)=>{
-  const indice=notas.length-1-pos;
-  const tarjeta=document.createElement('article');tarjeta.className='papel';
-  const nombre=document.createElement('strong');nombre.textContent=n.usuario==='Leonardo'?'Él':n.usuario==='Ayumi'?'Ella':'Una nota de amor';
-  const texto=document.createElement('p');texto.textContent=n.texto;
-  const fecha=document.createElement('small');fecha.textContent=new Date(n.fecha).toLocaleString('es');
-  const borrar=document.createElement('button');borrar.type='button';borrar.className='suave borrar-nota';borrar.textContent='Borrar nota';borrar.setAttribute('aria-label','Borrar nota del '+fecha.textContent);
-  borrar.onclick=()=>{const copia=notas.filter((_,i)=>i!==indice);if(!guardar('amor-notas',copia))return;ultimaNotaBorrada={nota:n,indice};notas=copia;dibujarNotas();};
-  const acciones=document.createElement('div');acciones.className='acciones-nota';acciones.append(fecha,borrar);tarjeta.append(nombre,texto,acciones);$('notas').append(tarjeta);
- });
-}
-$('nuevaNota').onsubmit=e=>{e.preventDefault();const texto=$('textoNota').value.trim();if(!texto)return;notas.push({usuario,texto,fecha:new Date().toISOString()});notas=notas.slice(-200);guardar('amor-notas',notas);$('textoNota').value='';dibujarNotas();};
 $('archivoMusica').onchange=()=>{const archivo=$('archivoMusica').files[0];if(!archivo)return;if(urlMusica)URL.revokeObjectURL(urlMusica);urlMusica=URL.createObjectURL(archivo);$('musica').src=urlMusica;$('nombreMusica').textContent=archivo.name;$('musica').play().catch(()=>avisar('Pulsa reproducir para escuchar la canción.'));};
 $('musica').onerror=()=>avisar('No se pudo reproducir este audio. Prueba un archivo MP3.');
 $('archivoVideo').onchange=()=>{const archivo=$('archivoVideo').files[0];if(!archivo)return;if(urlVideo)URL.revokeObjectURL(urlVideo);urlVideo=URL.createObjectURL(archivo);$('fondoVideo').src=urlVideo;$('fondoVideo').style.display='block';$('pausarVideo').textContent='Pausar video';$('fondoVideo').play().catch(()=>avisar('Pulsa el botón de video para reproducirlo.'));};
