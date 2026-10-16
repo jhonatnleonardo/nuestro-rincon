@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="img" aria-labelledby="title desc">
+<title id="title">L + A, un amor bonito</title><desc id="desc">Un corazón rosa brillante con las iniciales de Leonardo y Ayumi, rodeado de estrellas.</desc>
+<defs><linearGradient id="rosa" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd0dd"/><stop offset=".45" stop-color="#ed8eae"/><stop offset="1" stop-color="#b83f71"/></linearGradient><filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12"/></filter></defs>
+<ellipse cx="180" cy="158" rx="113" ry="91" fill="#ee87b0" opacity=".22" filter="url(#brillo)"/>
+<path d="M180 255C156 235 54 174 54 107C54 47 132 30 180 89C228 30 306 47 306 107C306 174 204 235 180 255Z" fill="url(#rosa)" stroke="#ffd6df" stroke-width="2"/>
+<path d="M77 111C78 72 124 63 146 81" fill="none" stroke="#fff5f7" opacity=".65" stroke-width="6" stroke-linecap="round"/>
+<text x="180" y="159" text-anchor="middle" fill="#58233e" font-family="Georgia,serif" font-size="49">L + A</text>
+<text x="180" y="188" text-anchor="middle" fill="#642740" font-family="Arial,sans-serif" font-size="10" letter-spacing="3">SIEMPRE JUNTOS</text>
+<g fill="#ffe4b9"><path d="M36 53l3 10 10 3-10 3-3 10-3-10-10-3 10-3z"/><path d="M321 158l3 10 10 3-10 3-3 10-3-10-10-3 10-3z"/><path d="M283 24l2 7 7 2-7 2-2 7-2-7-7-2 7-2z"/></g>
+<g fill="#efb1c6"><circle cx="71" cy="227" r="3"/><circle cx="308" cy="69" r="3"/><circle cx="260" cy="251" r="2"/></g></svg>
