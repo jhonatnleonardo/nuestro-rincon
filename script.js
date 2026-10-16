@@ -4,8 +4,8 @@ const CONTRASENA = 'NuestroAmor';
 const $ = id => document.getElementById(id);
 let usuario='',urlMusica='',urlVideo='';
 // Música y video incluidos, disponibles al volver a abrir la página.
-$('musica').src='AMOR4.mp3';
-$('nombreMusica').textContent='AMOR4 · Nuestra canción';
+$('musica').src='el-recuerdo.mp3';
+$('nombreMusica').textContent='La Tormenta de Arena · El recuerdo';
 $('fondoVideo').src='fondo.mp4';
 function iniciarAmbiente(){
  if($('fondoVideo').getAttribute('src')){
@@ -90,8 +90,7 @@ $('color').oninput=e=>{document.body.classList.remove('noche');$('tema').textCon
 (()=>{
  const audio=$('musica');audio.loop=false;
  let seleccion=0,base=null;
- const canciones=['AMOR4','AMOR','AMOR2','AMOR3'].map(nombre=>({nombre,src:`${nombre}.mp3`}));
-canciones.push({nombre:'La Tormenta de Arena · El recuerdo',src:'el-recuerdo.mp3'});
+ const canciones=[{nombre:'La Tormenta de Arena · El recuerdo',src:'el-recuerdo.mp3'},...['AMOR4','AMOR','AMOR2','AMOR3'].map(nombre=>({nombre,src:`${nombre}.mp3`}))];
  function dibujar(){
   $('listaMusica').replaceChildren();
   canciones.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.className='suave cancion'+(i===seleccion?' elegida':'');b.textContent=(i===seleccion?'♫ ':'')+c.nombre;b.setAttribute('aria-pressed',String(i===seleccion));b.onclick=()=>reproducir(i);$('listaMusica').append(b);});
