@@ -20,3 +20,5 @@ body:has(#fondoVideo[style*='block']) .velo{opacity:.50}
 .controles-lista{display:flex;gap:12px;flex-wrap:wrap;margin:15px 0}.lista-musica{display:grid;gap:8px;max-height:320px;overflow:auto}.cancion{text-align:left;overflow-wrap:anywhere}.cancion.elegida{border:1px solid var(--rosa);color:var(--rosa);font-weight:bold}
 
 .album-entrada{width:190px;max-width:70%;margin:0 auto 8px}.album-entrada img{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 12px #a44f6220)}
+
+.descargar-foto{display:block;margin-top:14px;color:var(--rosa)}details summary{cursor:pointer;font-weight:bold}#estadoMensajes,#estadoFotos{white-space:pre-wrap}button:disabled{cursor:wait;opacity:.6}
