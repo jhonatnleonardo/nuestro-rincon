@@ -27,7 +27,7 @@ $('salir').onclick=()=>{usuario='';$('pagina').hidden=true;$('entrada').hidden=f
 function tema(noche){document.body.classList.toggle('noche',noche);$('tema').textContent=noche?'☀ Modo día':'☾ Modo noche';}
 tema(leer('amor-noche',false));
 $('tema').onclick=()=>{const noche=!document.body.classList.contains('noche');tema(noche);guardar('amor-noche',noche);};
-const fechas=leer('amor-fechas',{});$('conocimos').value=fechas.conocimos||'';$('juntos').value=fechas.juntos||'';
+const fechas=leer('amor-fechas',{});if(leer('amor-fechas-version','')!=='fechas-confirmadas-1'){fechas.conocimos='2023-10-02';fechas.juntos='2026-10-13';if(guardar('amor-fechas',fechas))guardar('amor-fechas-version','fechas-confirmadas-1');}$('conocimos').value=fechas.conocimos||'2023-10-02';$('juntos').value=fechas.juntos||'2026-10-13';
 function contar(){const fecha=$('juntos').value;if(!fecha){$('contador').textContent='Tenemos tantos recuerdos por crear.';return;}const dias=Math.floor((Date.now()-new Date(fecha+'T00:00:00'))/86400000);$('contador').textContent=dias>=0?`${dias.toLocaleString('es')} días escribiendo nuestra historia.`:'Nuestra próxima aventura ya tiene fecha.';}
 contar();$('guardarFechas').onclick=()=>{if(guardar('amor-fechas',{conocimos:$('conocimos').value,juntos:$('juntos').value}))avisar('Fechas guardadas ♡');contar();};
 let notas=leer('amor-futuro-mensajes',[]);if(!Array.isArray(notas))notas=[];
