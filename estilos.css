@@ -12,3 +12,5 @@ body:has(#fondoVideo[style*='block']) .velo{opacity:.50}
 .corazon-iniciales{max-width:300px;margin:18px auto 5px}.corazon-iniciales img{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 18px #d75d8b30)}
 
 .carta-permanente{max-width:800px;margin:30px auto 45px;padding:clamp(20px,4vw,44px)}.carta-permanente h2{font-size:clamp(25px,4vw,36px);line-height:1.4}.carta-permanente p{line-height:1.95}.carta-permanente strong{color:var(--rosa)}
+
+.acciones-nota{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.borrar-nota{border:1px solid var(--borde);color:var(--rosa)}
