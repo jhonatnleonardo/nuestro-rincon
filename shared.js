@@ -47,7 +47,7 @@ let messageDraftId=null;
 $('textoNota').oninput=()=>{messageDraftId=null;};
 $('nuevaNota').onsubmit=async e=>{
  e.preventDefault();const body=$('textoNota').value.trim();if(!body)return;const b=$('nuevaNota').querySelector('button');b.disabled=true;b.textContent='Guardando…';messageDraftId ||= crypto.randomUUID();
- try{await cloud('message',{id:messageDraftId,body,author:$('autorMensaje').value.trim()||'Mi niña'});$('textoNota').value='';messageDraftId=null;await loadMessages();sharedStatus('estadoMensajes','Mensaje guardado. Ambos pueden verlo al entrar.');}
+ try{await cloud('message',{id:messageDraftId,body,author:'Mi niña'});$('textoNota').value='';messageDraftId=null;await loadMessages();sharedStatus('estadoMensajes','Mensaje guardado. Ambos pueden verlo al entrar.');}
  catch(error){sharedStatus('estadoMensajes',error.message);}finally{b.disabled=false;b.textContent='Guardar mensaje ♡';}
 };
 function photoCard(p){
